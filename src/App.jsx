@@ -39,6 +39,9 @@ const App = () => {
   useEffect(()=>{
     passwordGenrator();
   }, [length, numAllow, passwordGenrator, charAllow])
+
+
+
   return (
     <div className='bg-black w-screen h-screen flex justify-center items-center'>
       <div className='w-[40%] bg-slate-700 p-6 rounded-lg'>
@@ -52,8 +55,10 @@ const App = () => {
           />
           <button 
           className='bg-blue-600 h-[50px] rounded-r-lg w-[20%] text-xl font-semibold' 
-          onClick={()=>copyPasswordToClipBoard}>copy</button>
+          onClick={()=>copyPasswordToClipBoard}>copy</button>//Copy function
         </div>
+
+        {/* 1st div ended */}
 
         <div className='flex  items-center gap-x-8'>
           <div className='flex items-center justify-between gap-x-8'>
@@ -63,7 +68,7 @@ const App = () => {
             max={99} 
             min={16} 
             value={length} 
-            onChange={(e)=>{setLength(e.target.value)}}
+            onChange={(e)=>{setLength(e.target.value)}}//To update the length
             
             />
             {/* <label htmlFor="length" className='text-white text-lg font-semibold'>Length</label> */}
