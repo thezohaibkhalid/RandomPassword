@@ -6,7 +6,10 @@ const App = () => {
   const [charAllow, setCharAllow] = useState(false);
   const [password, setPassword] = useState("");
 
+  //Use Ref
   const passwordCopyRef = useRef();
+
+  
   const passwordGenrator = useCallback(()=>{
     let pass = "";
     let str = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
@@ -25,22 +28,14 @@ const App = () => {
   setPassword(pass);
   }, [length, charAllow, numAllow, setPassword])
 
-  const copyPasswordToClipBoard = useCallback(async () => {
-    if (document.hasFocus()) {
-      try {
-        // Select the text
-        if (passwordCopyRef.current) {
-          passwordCopyRef.current.select();
-        }
-        await window.navigator.clipboard.writeText(password);
-        console.log('Text copied to clipboard');
-      } catch (error) {
-        console.error('Failed to copy text to clipboard', error);
-      }
-    } else {
-      console.error('Document is not focused');
-    }
-  }, [password]);
+  //Password Copy
+  const copyPasswordToClipBoard = useCallback(
+    async ()=>{
+      passwordCopyRef.current?.select();
+    await window.navigator.clipboard.writeText(password)
+  },
+    [password]
+  )
   useEffect(()=>{
     passwordGenrator();
   }, [length, numAllow, passwordGenrator, charAllow])
