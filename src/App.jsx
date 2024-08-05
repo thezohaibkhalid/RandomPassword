@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useEffect } from 'react'
+import React, { useState, useCallback, useEffect, useRef } from 'react'
 
 const App = () => {
   const [length, setLength] = useState(8);
@@ -6,6 +6,7 @@ const App = () => {
   const [charAllow, setCharAllow] = useState(false);
   const [password, setPassword] = useState("");
 
+  const passwordCopyRef = useRef();
   const passwordGenrator = useCallback(()=>{
     let pass = "";
     let str = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
@@ -24,6 +25,22 @@ const App = () => {
   setPassword(pass);
   }, [length, charAllow, numAllow, setPassword])
 
+  const copyPasswordToClipBoard = useCallback(async () => {
+    if (document.hasFocus()) {
+      try {
+        // Select the text
+        if (passwordCopyRef.current) {
+          passwordCopyRef.current.select();
+        }
+        await window.navigator.clipboard.writeText(password);
+        console.log('Text copied to clipboard');
+      } catch (error) {
+        console.error('Failed to copy text to clipboard', error);
+      }
+    } else {
+      console.error('Document is not focused');
+    }
+  }, [password]);
   useEffect(()=>{
     passwordGenrator();
   }, [length, numAllow, passwordGenrator, charAllow])
@@ -32,12 +49,15 @@ const App = () => {
       <div className='w-[40%] bg-slate-700 p-6 rounded-lg'>
         <div className='w-full flex justify-center items-center mb-6'>
           <input 
+          ref={passwordCopyRef}
             type="text" 
             value={password}
             placeholder='Your password' 
             className='bg-white rounded-l-lg w-[70%] h-[50px] text-lg placeholder-black font-bold pl-5' 
           />
-          <button className='bg-blue-600 h-[50px] rounded-r-lg w-[20%] text-xl font-semibold'>copy</button>
+          <button 
+          className='bg-blue-600 h-[50px] rounded-r-lg w-[20%] text-xl font-semibold' 
+          onClick={()=>copyPasswordToClipBoard}>copy</button>
         </div>
 
         <div className='flex  items-center gap-x-8'>
